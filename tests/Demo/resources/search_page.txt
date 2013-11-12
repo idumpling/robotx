@@ -1,0 +1,23 @@
+*** Settings ***
+Documentation    A resource file containing the application specific keywords
+...
+...              that create our own domain specific language. This resource
+...              implements a service resource.
+Library          Selenium2Library
+
+
+*** Variables ***
+${SearchPage}                http://www.google.com
+${SearchString}              google
+${SearchInputBox Locator}    xpath=//input[@type="text"]
+${SleepTime}                 0
+
+
+*** Keywords ***
+Search a String
+    Open Browser    ${SearchPage}
+    Sleep           ${SleepTime}
+    Input Text      ${SearchInputBox Locator}    ${SearchString}
+    Sleep           ${SleepTime}
+    Submit Form
+    Sleep           ${SleepTime}

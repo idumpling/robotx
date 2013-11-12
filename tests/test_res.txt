@@ -1,0 +1,37 @@
+*** Settings ***
+Library    OperatingSystem
+
+
+*** Variables ***
+${TestProject}    Demo
+${CasePath}       ${TestProject}${/}cases
+${WebCasePath}    ${CasePath}${/}01__webui${/}01__wiki_test.txt
+${CmdCasePath}    ${CasePath}${/}02__cmd${/}01__gherkin.txt
+
+ 
+*** Keywords ***
+Test CMD Is "${test cmd}"
+    Set Test Variable     ${test cmd}
+
+Execute Test CMD
+    ${actual result} =    Run                 ${test cmd}
+    Set Test Variable     ${actual result}    
+
+Verify Result Contains "${expected result}"
+    Should Contain        ${actual result}    ${expected result}
+
+verify project is created
+    ${web file}       Get File     Newproject/cases/01__webui/01__wiki_test.txt
+    Should Contain    ${web file}  Case 317459 demo show 1
+    Run               rm -rf Newproject
+
+verify resource is created
+    ${file}           Get File     newresource.txt
+    Should Contain    ${file}      Open Browser To Wiki Home Page
+    Run               rm -rf newresource.txt
+
+verify suite is created
+    ${file}           Get File     newsuite.txt
+    Should Contain    ${file}      Case 317459 demo show 1
+    Run               rm -rf newsuite.txt
+

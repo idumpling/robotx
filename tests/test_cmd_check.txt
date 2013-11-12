@@ -1,0 +1,26 @@
+*** Settings ***
+Documentation    A test suite containing tests related to robotx check.
+...
+...              These tests are designed to verify robotx checker can
+...              check case syntex, case name format, and case tag format.
+Resource         test_res.txt
+
+
+*** Test Cases ***
+Case syntex checking
+    Given test CMD is "robotx check -c ${WebCasePath}"
+    When execute test CMD
+    Then verify result contains "Case 317462 demo show 4"
+    And verify result contains "No keyword with name 'And do non-exist"
+
+Case name format checking
+    Given test CMD is "robotx check -c ${WebCasePath} --tcms -p 11340"
+    When execute test CMD
+    Then verify result contains "demo show 4"
+    And verify result contains "Pls use 'Case case_id' as the beginning"
+
+Case tag format checking
+    Given test CMD is "robotx check -c ${WebCasePath} --tcms -p 11340"
+    When execute test CMD
+    Then verify result contains "Case 317461 demo show 3"
+    And verify result contains "Pls add tag 'ID_case_id' to this case"

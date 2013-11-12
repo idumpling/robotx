@@ -1,0 +1,44 @@
+*** Settings ***
+Documentation    A test suite containing tests related to robotx check.
+...
+...              These tests are designed to verify robotx checker can
+...              check case syntex, case name format, and case tag format.
+Resource         test_res.txt
+
+
+*** Test Cases ***
+New project name must begin with capital letter
+    Given test CMD is "robotx generate -p newproject"
+    When execute test CMD
+    Then verify result contains "Error: Project names must begin with a"
+    And verify result contains "contain only letters, numbers and underscores"
+
+Test create new project
+    Given test CMD is "robotx generate -p Newproject"
+    When execute test CMD
+    Then verify project is created
+
+new resource name should end with .txt
+    Given test CMD is "robotx generate -r newresource"
+    When execute test CMD
+    Then verify result contains "must end with .txt"
+
+Test create new resource
+    Given test CMD is "robotx generate -r newresource.txt"
+    When execute test CMD
+    Then verify resource is created
+
+new suite name should end with .txt
+    Given test CMD is "robotx generate -s newsuite"
+    When execute test CMD
+    Then verify result contains "must end with .txt"
+
+Test create new suite
+    Given test CMD is "robotx generate -s newsuite.txt"
+    When execute test CMD
+    Then verify suite is created
+
+Test create doc
+    Given test CMD is "robotx generate -d Demo"
+    When execute test CMD
+    Then verify result contains "Generate Demo resources, libs docs ..."

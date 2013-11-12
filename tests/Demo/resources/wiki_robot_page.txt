@@ -1,0 +1,25 @@
+*** Settings ***
+Documentation     A resource file containing WiKi Robot Framework page
+...               specific keywords.
+...
+...               domain specific language. They utilize keywords provided
+...               by the imported Selenium2Library.
+Library           Selenium2Library
+
+
+*** Variables ***
+#************************** Common Variables ******************************
+${WikiRobotPage Title}     Robot Framework - Wikipedia, the free encyclopedia
+
+#************************** Page Elements *********************************
+${RIDELink Text}           "RIDE Homepage"
+
+
+*** Keywords ***
+Verify Robot Framework Wiki Page
+    [Documentation]    WiKi Robot Framework page verification
+    Title Should Be    ${WikiRobotPage Title}
+
+Click Link and goto RIDE Page
+    [Documentation]    Jump to RIDE Page after click link
+    Click Link         ${RIDELink Text}

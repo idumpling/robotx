@@ -1,0 +1,25 @@
+*** Settings ***
+Documentation     Example test case using the gherkin syntax.
+...
+...               This test has a workflow similar to the keyword-driven
+...               examples. The difference is that the keywords use higher
+...               abstraction level and their arguments are embedded into
+...               the keyword names.
+...
+...               This kind of _gherkin_ syntax has been made popular by
+...               [http://cukes.info|Cucumber]. It works well especially when
+...               tests act as examples that need to be easily understood also
+...               by the business people.
+Library           robotx.lib.DebugLibrary.Debug
+Resource          ../../resources/cmd_res.txt
+
+
+*** Test Cases ***
+Case 317559 Addition
+    [Documentation]    An example for showing Robot Framework case
+    [Tags]    ID_317559     tag2    debug
+    Given calculator has been cleared
+    When user types "1 + 1"
+    and user pushes equals
+    debug
+    Then result is "2"

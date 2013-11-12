@@ -1,0 +1,31 @@
+*** Settings ***
+Documentation     Example test case using the gherkin syntax.
+...
+...               This test has a workflow similar to the keyword-driven
+...               examples. The difference is that the keywords use higher
+...               abstraction level and their arguments are embedded into
+...               the keyword names.
+...
+...               This kind of _gherkin_ syntax has been made popular by
+...               [http://cukes.info|Cucumber]. It works well especially when
+...               tests act as examples that need to be easily understood also
+...               by the business people.
+Library           CalculatorLibrary.py
+
+
+*** Keywords ***
+Calculator has been cleared
+    [Documentation]    clear screen
+    Push button        C
+
+User types "${expression}"
+    [Documentation]    type content
+    Push buttons       ${expression}
+
+User pushes equals
+    [Documentation]    press button
+    Push button        =
+
+Result is "${result}"
+    [Documentation]    verify result
+    Result should be   ${result}

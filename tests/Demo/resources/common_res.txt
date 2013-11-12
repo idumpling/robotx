@@ -1,0 +1,40 @@
+*** Settings ***
+Documentation    A resource file containing the application specific keywords
+...
+...              that create our own domain specific language. This resource
+...              implements a service resource.
+Library          Selenium2Library
+Library          OperatingSystem
+Resource         home_page.txt
+Resource         wiki_robot_page.txt
+Resource         ride_page.txt
+Resource         search_page.txt
+
+
+*** Variables ***
+${Server}                   www.wikipedia.org
+${Browser}                  firefox
+${Delay}                    0
+${SearchPage}               http://www.baidu.com
+${SearchString}             google
+
+
+*** Keywords ***
+Search for Robot Framework on Wikipedia
+    [Documentation]    Uses Wikipedia and Robot Framework
+    ...                Wiki Page Resources.
+    Search For Robot Framework
+    Verify Robot Framework Wiki Page
+
+From Robot Framework Wiki page goto RIDE Page
+    [Documentation]    Uses Robot Framework Wiki
+    ...                and RIDE Page Resources.
+    Click Link and goto RIDE Page
+    Verify RIDE Page
+
+Do Nothing
+    [Documentation]    Do nothing, just for running framework tests
+    No Operation
+
+Search String
+    Open Browser

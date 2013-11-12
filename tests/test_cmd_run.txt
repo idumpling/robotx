@@ -1,0 +1,25 @@
+*** Settings ***
+Documentation    A test suite containing tests related to robotx check.
+...
+...              These tests are designed to verify robotx checker can
+...              check case syntex, case name format, and case tag format.
+Resource         test_res.txt
+
+
+*** Test Cases ***
+run tests with jenkins and tcms
+    [Documentation]    TODO
+    No Operation
+
+run tests with jenkins and without tcms
+    [Documentation]    TODO
+    No Operation
+
+run tests without jenkins and with tcms
+    [Documentation]    TODO
+    No Operation
+
+run tests without jenkins and without tcms
+    [Documentation]    TODO
+    No Operation
+

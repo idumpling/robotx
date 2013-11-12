@@ -1,0 +1,42 @@
+*** Settings ***
+Documentation    A test suite containing tests related to robotx debug.
+...
+...              These tests are designed to verify robotx debug can
+...              be used in running case with keyword 'debug', 
+...              and debug mode.
+Resource         test_res.txt
+
+
+*** Test Cases ***
+Running case with keyword debug
+    [Documentation]    TODO
+    # Given test CMD is "pybot ${CmdCasePath}"
+    # When execute test CMD
+    # Then verify result contains "Enter into Robot Framework debug shell:"
+    # When test CMD is "exit"
+    # Then verify result contains "Robot Framework case   | PASS |"
+    No Operation
+
+Enter into Robot debug mode
+    [Documentation]    TODO
+    # Given test CMD is "robotx debug"
+    # When execute test CMD
+    # Then verify result contains "A Debug Case"
+    # And verify result contains "Enter into Robot Framework debug shell:"
+    # And verify result contains ">>>"
+    # When test CMD is "exit"
+    # Then verify result contains "| PASS |"
+    No Operation
+
+Open web browser with Robot debug mode
+    [Documentation]    TODO
+    # Given test CMD is "robotx debug"
+    # When execute test CMD
+    # Then verify result contains "A Debug Case"
+    # When test CMD is "web    http://www.google.com"
+    # Then verify result contains "import library  Selenium2Library"
+    # And verify result contains "open browser  http://www.google.com"
+    # When test CMD is "exit"
+    # Then verify result contains "| PASS |"
+    No Operation
+
