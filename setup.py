@@ -37,7 +37,7 @@ EXECUTE = {'console_scripts': ['robotx=robotx.core:execute']}
 
 
 setup(
-    name='RobotX',
+    name='robotx',
     version=VERSION,
     author='Xin Gao',
     author_email='fdumpling@gmail.com',
