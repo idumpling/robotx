@@ -6,7 +6,6 @@ And this is command entry point.
 import sys
 import inspect
 import optparse
-import pkg_resources
 
 from robotx.core.base import BaseCommand
 from robotx.utils.misc import walk_modules
@@ -30,18 +29,6 @@ def _get_commands_from_module(module):
         cmdname = cmd.__module__.split('.')[-1]
         d[cmdname] = cmd()
     return d
-
-
-def _get_commands_from_entry_points(group='robotx.core.commands'):
-    """As subject~"""
-    cmds = {}
-    for entry_point in pkg_resources.iter_entry_points(group):
-        obj = entry_point.load()
-        if inspect.isclass(obj):
-            cmds[entry_point.name] = obj()
-        else:
-            raise Exception("Invalid entry point %s" % entry_point.name)
-    return cmds
 
 
 def _get_commands_dict(settings):
