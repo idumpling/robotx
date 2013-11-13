@@ -30,7 +30,7 @@ def find_version(*file_paths):
 
 
 VERSION = find_version('robotx', '__init__.py')
-DESC = 'Toolset for automation development using Robot Framework'
+DESC = 'Toolset for automation development with Robot Framework'
 LDESC = read('README.md')
 DEPS = read_filelines('requires.txt')
 EXECUTE = {'console_scripts': ['robotx=robotx.core:execute']}

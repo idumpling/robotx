@@ -204,5 +204,5 @@ This document has been placed in the public domain.
 [Page Objects]: https://code.google.com/p/selenium/wiki/PageObjects
 [UI Mapping]: http://www.seleniumhq.org/docs/06_test_design_considerations.jsp#ui-mapping
 [Robot Doc]: http://robotframework.googlecode.com/hg/doc/userguide/RobotFrameworkUserGuide.html#documentation-formatting
-[Page Res Arch]: https://github.com/fdumpling/temp/raw/master/docs/page_res_arch.png
+[Page Res Arch]: https://github.com/idumpling/robotx/raw/master/docs/page_res_arch.png
 
