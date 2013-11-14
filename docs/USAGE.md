@@ -66,8 +66,9 @@ Debugger
 ### Insert breakpoint to test case  
 Insert keyword "debug" to test, then run test using pybot, and then test will be stoped at debug, and enter into shell debug mode.  
 Example  
+
       *** Settings ***
-      Library         DebugLibrary
+      Library    robotx.lib.DebugLibrary.Debug
 
       ** Test Cases **
       Case 1234
