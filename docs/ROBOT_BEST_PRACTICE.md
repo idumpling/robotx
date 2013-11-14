@@ -64,8 +64,12 @@ Naming Conventions
 
 Robot Framework Projects
 ------------------------
-    * Test and Resource Format
-      We use Plain Text format. Example is as follows,
+
+* Test and Resource Format
+We use Plain Text format. Example is as follows,
+
+Test suite file:
+
 
     *** Settings ***
     Documentation    A test suite with a single test for try page objects
@@ -89,6 +93,9 @@ Robot Framework Projects
         ...                for showing Page Resource.
         [Tags]             ID_317460    tag2
         Then search a string
+
+
+Resource file:
 
 
     *** Settings ***
