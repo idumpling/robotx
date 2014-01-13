@@ -68,9 +68,12 @@ class TCMSListener(object):
         caserun['status'] = attrs['status']
         caserun['endtime'] = attrs['endtime']
         caserun['message'] = attrs['message']
-        caserun['log'] = '\n' + '*' * 30 + '\n' + caserun['logtime'] + \
-                         '\n' + attrs['message'] + '\n' + \
-                         caserun['loginfo'] + '\n' + '*' * 30
+        if caserun.has_key('logtime'):
+            caserun['log'] = '\n' + '*' * 30 + '\n' + caserun['logtime'] + \
+                            '\n' + attrs['message'] + '\n' + \
+                            caserun['loginfo'] + '\n' + '*' * 30
+        else:
+            caserun['log'] = ''
         # change tcms case status to attrs['status'], PASS/FAIL
         caserun_status = caserun['status'] + 'ED'
         self.tcms.update_caserun_status(caserun['id'], caserun_status)

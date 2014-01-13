@@ -1,4 +1,4 @@
-robotframework==2.8.1
+robotframework>=2.8.1
 selenium>=2.35.0
 robotframework-selenium2library>=1.4.0
 pexpect>=2.4

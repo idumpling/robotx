@@ -46,7 +46,8 @@ Test Case Management System
 Default TCMS Client  
 ~~~~~~~~~~~~~~~~~~~
 
-Currently, RobotX uses `Nitrate`_ as default TCMS(Test Case Management System). If your TCMS is not Nitrate(such as TestLink), you need write a new client and replace the `default TCMS client of RobotX`_.
+Currently, RobotX uses `Nitrate`_ as default TCMS(Test Case Management System). 
+If your TCMS is not Nitrate(such as TestLink), you need write a new client and replace the `default TCMS client of RobotX`_.
 
 Configure TCMS Client   
 ~~~~~~~~~~~~~~~~~~~~~
