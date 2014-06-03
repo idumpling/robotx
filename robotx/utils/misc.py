@@ -1,4 +1,12 @@
+"""some minor funcs"""
+
+
 from pkgutil import iter_modules
+
+import netifaces
+from fabric.colors import green
+from fabric.colors import red
+from fabric.colors import yellow
 
 
 def walk_modules(path, load=False):
@@ -21,3 +29,37 @@ def walk_modules(path, load=False):
                 submod = __import__(fullpath, {}, {}, [''])
                 mods.append(submod)
     return mods
+
+
+def get_ip():
+    """get worker ip addrs"""
+    nics = netifaces.interfaces()
+    addrs = netifaces.ifaddresses(nics[1])
+    worker_ip = addrs[netifaces.AF_INET][0]['addr']
+    return worker_ip
+
+
+def print_output(startend='', passfail='', starttime='', endtime='',
+                 msg='', others=''):
+    """output the info"""
+    if len(msg) >= 70:
+        msg = msg[:67] + '...'
+    else:
+        msg = msg + ' '*(70-len(msg))
+    if startend == 'start':
+        output_info = msg + yellow(' | RUN  |')
+        print '-'*80
+        print output_info
+        print 'Starting Time: ', starttime
+        print '-'*80
+    if startend == 'end':
+        if passfail == 'PASS':
+            output_info = msg + green(' | PASS |')
+        else:
+            output_info = msg + red(' | FAIL |')
+        print '-'*80
+        print output_info
+        print others
+        print 'Starting Time: ', starttime
+        print 'End Time:      ', endtime
+        print '-'*80

@@ -3,7 +3,11 @@
 Usage: robotx run [options]
 """
 
+
+import os
 import sys
+from datetime import datetime
+from multiprocessing import Pool
 
 from robot import run
 
@@ -11,6 +15,9 @@ from robotx.core.base import BaseCommand
 from robotx.core.nitrateclient import TCMS
 from robotx.core.exceptions import UsageError
 from robotx.core.paramshandler import ParamsHandler
+from robotx.core.predistribute import collect_results
+from robotx.core.predistribute import distribute_tasks
+from robotx.core.predistribute import launch_workers
 
 
 class Command(BaseCommand):
@@ -31,6 +38,9 @@ class Command(BaseCommand):
 
     def add_options(self, parser):
         """Sub command 'run' options"""
+        parser.add_option('--distributed', action='store_true', dest='is_dist',
+                          help='for distributed testing. \
+                          default is running as no distributed.')
         parser.add_option('--jenkins', action='store_true', dest='is_jenkins',
                           help='Whether run project in jenkins. \
                           default is running in local.')
@@ -38,13 +48,13 @@ class Command(BaseCommand):
                           help='Whether write result to tcms in real-time. \
                           default is running without tcms.')
         parser.add_option("-c", "--cases", dest="cases",
-                          metavar="CASES_PATH", help="Set Cases_PATH")
+                          metavar="CASES_PATH", help="Set PROJECT Cases_PATH")
         parser.add_option("-p", "--planid", dest="plan_id",
                           metavar="PLAN_ID", help="Set PLAN_ID")
         parser.add_option("-r", "--runid", dest="run_id", default='',
                           metavar="RUN_ID", help="Set RUN_ID")
         parser.add_option("-o", "--output", dest="output_dir", default='./',
-                          metavar="OUTPUT_DIR", help="Set OUTput_DIR")
+                          metavar="OUTPUT_DIR", help="Set OUTPUT_DIR")
         parser.add_option("-t", "--tags", dest="case_tags", action="append",
                           default=[], metavar="CASE_TAGS",
                           help="Select case via CASE_TAG")
@@ -56,6 +66,11 @@ class Command(BaseCommand):
                           action="append", default=[],
                           metavar="OTHER_VARIABLES",
                           help="Dynamically set variables via OTHER_VARIABLES")
+        parser.add_option("-h", "--hosts", dest="slave_ips", action="append",
+                          default=[], metavar="HOSTS",
+                          help="Specify workers via ips")
+        parser.add_option("-w", "--password", dest="password",
+                          metavar="PASSWORD", help="Set worker PASSWORD")
 
     def run(self, args, opts):
         """Sub command 'run' runner"""
@@ -78,7 +93,7 @@ class Command(BaseCommand):
             if len(case_ids) == 0:
                 print "There's no case matching filter conditions"
                 sys.exit(255)
-            tag_case_id = ['ID_' + str(id) for id in case_ids]
+            tag_case_id = ['ID_' + str(theid) for theid in case_ids]
             output_dir = params.result_path
             if opts.is_tcms:
                 # run with Jenkins and TCMS
@@ -88,9 +103,9 @@ class Command(BaseCommand):
                     include=tag_case_id,
                     exclude=exclude_tag,
                     noncritical=noncritical,
-                    tagstatexclude=tagstatexclude,
                     outputdir=output_dir,
                     variable=other_variables,
+                    tagstatexclude=tagstatexclude,
                     listener=listener)
             else:
                 # run with Jenkins but without TCMS
@@ -98,8 +113,8 @@ class Command(BaseCommand):
                     loglevel=log_level,
                     include=tag_case_id,
                     exclude=exclude_tag,
-                    outputdir=output_dir,
                     noncritical=noncritical,
+                    outputdir=output_dir,
                     variable=other_variables,
                     tagstatexclude=tagstatexclude)
         else:
@@ -110,7 +125,8 @@ class Command(BaseCommand):
                 raise UsageError("plan id must be set with -p or --planid!")
             plan_id = opts.plan_id
             run_id = opts.run_id
-            cases_path = opts.cases
+            project_path = opts.cases
+            cases_path = os.path.join(project_path, 'cases')
             tags = opts.case_tags
             priorities = opts.case_priorities
             output_dir = opts.output_dir
@@ -120,29 +136,60 @@ class Command(BaseCommand):
             if len(case_ids) == 0:
                 print "There's no case matching filter conditions"
                 sys.exit(255)
-            tag_case_id = ['ID_' + str(id) for id in case_ids]
-            if opts.is_tcms:
-                # run without Jenkins but with TCMS
-                listener = 'robotx.core.listener.TCMSListener:%s:%s' \
-                           % (plan_id, run_id)
-                if not opts.plan_id:
-                    raise UsageError("plan id must be set using -p/--planid!")
-                run(cases_path,
-                    loglevel=log_level,
-                    include=tag_case_id,
-                    exclude=exclude_tag,
-                    noncritical=noncritical,
-                    tagstatexclude=tagstatexclude,
-                    outputdir=output_dir,
-                    variable=other_variables,
-                    listener=listener)
+            tag_case_id = ['ID_' + str(theid) for theid in case_ids]
+            # run all testing on one node, and not distributed.
+            if not opts.is_dist:
+                if opts.is_tcms:
+                    # run without Jenkins but with TCMS
+                    listener = 'robotx.core.listener.TCMSListener:%s:%s' \
+                               % (plan_id, run_id)
+                    run(cases_path,
+                        loglevel=log_level,
+                        include=tag_case_id,
+                        exclude=exclude_tag,
+                        noncritical=noncritical,
+                        outputdir=output_dir,
+                        variable=other_variables,
+                        tagstatexclude=tagstatexclude,
+                        listener=listener)
+                else:
+                    # run without Jenkins and TCMS
+                    run(cases_path,
+                        loglevel=log_level,
+                        include=tag_case_id,
+                        exclude=exclude_tag,
+                        noncritical=noncritical,
+                        outputdir=output_dir,
+                        variable=other_variables,
+                        tagstatexclude=tagstatexclude)
+            # running testing on multi nodes concurrently 
             else:
-                # run without Jenkins and TCMS
-                run(cases_path,
-                    loglevel=log_level,
-                    include=tag_case_id,
-                    exclude=exclude_tag,
-                    outputdir=output_dir,
-                    noncritical=noncritical,
-                    variable=other_variables,
-                    tagstatexclude=tagstatexclude)
+                if not opts.slave_ips:
+                    raise UsageError("slave ip must be set \
+                        with -i or --slave_ips")
+                if not opts.password:
+                    raise UsageError("password must be set \
+                        with -w or --password!")
+                slave_password = opts.password
+                os.environ['all_slave_password'] = slave_password
+                slavesip_list = opts.slave_ips
+                slavesip = reduce(lambda x, y: x+','+y, slavesip_list)
+                masterip = '192.168.122.1'
+                worker_root = '/home/automation'
+                stime = datetime.now()
+                robotpool = Pool()
+                robotpool.apply_async(launch_workers,
+                                      args=(project_path, worker_root, \
+                                      masterip, slavesip, \
+                                      plan_id, other_variables,))
+                robotpool.apply_async(distribute_tasks, 
+                                      args=(tag_case_id, plan_id,))
+                robotpool.apply_async(collect_results, args=(tag_case_id, \
+                                      plan_id, worker_root, slavesip, \
+                                      opts.is_tcms))
+                print 'Start to launch workers ...'.center(50, '*')
+                robotpool.close()
+                robotpool.join()
+                etime = datetime.now()
+                elapsed_time = etime - stime
+                print 'Elapsed Time: %s' % elapsed_time
