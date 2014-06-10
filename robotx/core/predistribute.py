@@ -18,8 +18,8 @@ def launch_workers(project_path, worker_root, masterip,
     copyfiles = "copy_files:%s,%s" % (project_path, worker_root)
     runworkers = "run_workers:%s,%s,%s,%s,%s" \
         % (worker_root, masterip, planid, cases_path, other_variables)
-    os.system("fab -f %s -H %s %s %s" \
-        % (fab_file, slavesip, copyfiles, runworkers))
+    os.system("fab -f %s -H %s %s %s"
+              % (fab_file, slavesip, copyfiles, runworkers))
 
 
 def distribute_tasks(tags, port):
@@ -55,24 +55,29 @@ def collect_results(tags, port, worker_root, slavesip, is_tcms):
     controller.bind("tcp://*:%s" % cport)
     while True:
         result = results_receiver.recv_pyobj()
+        receive_count += 1
+        print '######################the content is: ', result
+        print '######################receive_count is: ', receive_count
         if is_tcms:
             #***************** Update TCMS caserun status **************
             print 'emulate tcms doing'.center(80, '*')
             print 'the content is: ', result
             time.sleep(5)
-            receive_count += 1
+            #receive_count += 1
             print 'tcms well done'.center(80, '*')
             #*********************** Finally ***************************
         if receive_count == task_num:
             #sending kill signal to workers
             controller.send_pyobj("KILL")
             # collect reports and produce final report
+            robotx_path = robotx.__path__[0]
+            fab_file = os.path.join(robotx_path, 'core', 'fabworker.py')
             collectresults = "collect_reports:%s" % worker_root
-            os.system("fab -f fabworker.py -H %s %s" \
-                      % (slavesip, collectresults))
+            os.system("fab -f %s -H %s %s"
+                      % (fab_file, slavesip, collectresults))
             os.system("rebot --name 'Demo Report' --output alloutput \
                       --log alllog --report allreport \
-                      --processemptysuite ./*.xml")
+                      --processemptysuite --tagstatexclude 'ID_*' ./*.xml")
             # kill all!!!
             time.sleep(5)
             break
@@ -84,4 +89,3 @@ if __name__ == '__main__':
             #'tag6', 'tag7', 'tag8', 'tag9', 'tag10']
     PLANID = '10771'
     distribute_tasks(tags=TAGS, port=PLANID)
-

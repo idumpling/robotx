@@ -47,3 +47,5 @@ report*.html
 
 # image files
 *.png
+
+reinstall.sh

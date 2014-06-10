@@ -8,6 +8,7 @@ from fabric.api import env
 from fabric.api import get
 from fabric.api import put
 from fabric.api import run
+from fabric.api import shell_env
 
 import robotx
 
@@ -35,12 +36,14 @@ def run_workers(worker_root, masterip, planid, cases_path, other_variables):
     worker_file = 'workerdaemon.py'
     worker_cmd = 'python %s %s %s %s %s' \
                  % (worker_file, masterip, planid, cases_path, other_variables)
-    with cd(worker_root):
-        run(worker_cmd)
+    with shell_env(DISPLAY=':0'):
+        with cd(worker_root):
+            run(worker_cmd)
 
 
 def collect_reports(worker_root):
     """docstring for collect_reports"""
     with cd(worker_root):
+        print "\nStart to collect result files"
         get('*.xml', './')
 
