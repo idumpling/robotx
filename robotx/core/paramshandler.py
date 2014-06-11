@@ -41,7 +41,10 @@ class ParamsHandler(object):
                            'TCMS_RUN_ID',
                            'CASE_PRIORITIES',
                            'CASE_TAGS',
-                           'OTHER_VARIABLES']
+                           'OTHER_VARIABLES',
+                           'MASTER_IP',
+                           'SLAVE_IPS',
+                           'SLAVE_PWD']
         for param in self.param_list:
             setattr(self.config, param.lower(), os.environ.get(param))
 
@@ -88,6 +91,34 @@ class ParamsHandler(object):
         if self.config.tcms_run_id is None:
             self.config.tcms_run_id = ''
         return self.config.tcms_run_id
+
+    @property
+    def master_ip(self):
+        """return master ip
+        """
+        if self.config.master_ip is None:
+            self.config.master_ip = ''
+        return self.config.master_ip
+
+    @property
+    def slave_ips(self):
+        """return slave ips list
+        """
+        slave_ips = []
+        if self.config.slave_ips is None:
+            return slave_ips
+        else:
+            ips_inital = self.config.slave_ips.splitlines()
+            slave_ips = [ip.strip() for ip in ips_inital if ip.strip() != '']
+            return slave_ips
+
+    @property
+    def slave_pwd(self):
+        """return the slaves login password
+        """
+        if self.config.slave_pwd is None:
+            self.config.slave_pwd = ''
+        return self.config.slave_pwd
 
     @property
     def case_tags(self):

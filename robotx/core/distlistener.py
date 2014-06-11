@@ -1,5 +1,6 @@
 """Listener for testing running on multi slaves"""
 
+import re
 import zmq
 
 from robotx.utils.misc import print_output
@@ -12,6 +13,7 @@ class MultiListener(object):
 
     def __init__(self, masterip, port):
         # create socket for sending tcms xmlrpc signal
+        self.caserun = {}
         self.context = zmq.Context.instance()
         self.results_sender = self.context.socket(zmq.PUSH)
         self.sport = str(int(port) + 1)
@@ -19,22 +21,34 @@ class MultiListener(object):
 
     def start_test(self, name, attrs):
         """do sth when testing start"""
-        testing_name = name
-        start_time = attrs['starttime']
-        print_output(startend='start', starttime=start_time, msg=testing_name)
+        self.caserun['casename'] = name
+        self.caserun['start_time'] = attrs['starttime']
+        print_output(startend='start', starttime=self.caserun['start_time'],
+                     msg=self.caserun['casename'])
 
     def end_test(self, name, attrs):
         """do sth when testing end"""
-        testing_name = name
-        result_status = attrs['status']
-        start_time = attrs['starttime']
-        end_time = attrs['endtime']
-        message = attrs['message']
-        print_output(startend='end', passfail=result_status,
-                     starttime=start_time,endtime=end_time,
-                     msg=testing_name, others=message)
-        self.results_sender.send_pyobj(testing_name)
+        tags = attrs['tags']
+        self.caserun['caseid'] = re.findall('ID_\d+|id_\d+', str(tags))[0][3:]
+        self.caserun['status'] = attrs['status'] + 'ED'
+        self.caserun['end_time'] = attrs['endtime']
+        self.caserun['message'] = attrs['message']
+        if 'logtime' in self.caserun:
+            self.caserun['log'] = '\n' + '*' * 30 + '\n' + \
+                                  self.caserun['logtime'] + \
+                                  '\n' + attrs['message'] + '\n' + \
+                                  self.caserun['loginfo'] + '\n' + '*' * 30
+        else:
+            self.caserun['log'] = ''
+        # change tcms case status to attrs['status'], PASS/FAIL
+        print_output(startend='end', passfail=self.caserun['status'],
+                     starttime=self.caserun['start_time'],
+                     endtime=self.caserun['end_time'],
+                     msg=self.caserun['casename'],
+                     others=self.caserun['message'])
+        self.results_sender.send_pyobj(self.caserun)
 
-
-
-
+    def log_message(self, message):
+        """do sth when one keyword error"""
+        self.caserun['loginfo'] = message['message']
+        self.caserun['logtime'] = message['timestamp']

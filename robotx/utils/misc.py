@@ -4,9 +4,9 @@
 from pkgutil import iter_modules
 
 import netifaces
-from fabric.colors import green
-from fabric.colors import red
-from fabric.colors import yellow
+#from fabric.colors import green
+#from fabric.colors import red
+#from fabric.colors import yellow
 
 
 def walk_modules(path, load=False):
@@ -47,16 +47,17 @@ def print_output(startend='', passfail='', starttime='', endtime='',
     else:
         msg = msg + ' '*(70-len(msg))
     if startend == 'start':
-        output_info = msg + yellow(' | RUN  |')
+        #output_info = msg + yellow(' | RUNNING |')
+        output_info = msg + ' | RUNNING |'
         print '-'*80
         print output_info
         print 'Starting Time: ', starttime
         print '-'*80
     if startend == 'end':
-        if passfail == 'PASS':
-            output_info = msg + green(' | PASS |')
+        if passfail == 'PASSED':
+            output_info = msg + ' | PASSED |'
         else:
-            output_info = msg + red(' | FAIL |')
+            output_info = msg + ' | FAILED |'
         print '-'*80
         print output_info
         print others

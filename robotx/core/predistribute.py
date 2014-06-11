@@ -7,14 +7,19 @@ import time
 import zmq
 
 import robotx
+from robotx.core.nitrateclient import TCMS
 
 
 def launch_workers(project_path, worker_root, masterip,
                    slavesip, planid, other_variables):
     """docstring for launch_worker"""
+    if project_path[-1] == '/':
+        project_path = project_path[:-1]
+    project_name = project_path.split('/')[-1]
     robotx_path = robotx.__path__[0]
     fab_file = os.path.join(robotx_path, 'core', 'fabworker.py')
-    cases_path = os.path.join(project_path, 'cases')
+    #cases_path = os.path.join(project_path, 'cases')
+    cases_path = os.path.join(project_name, 'cases')
     copyfiles = "copy_files:%s,%s" % (project_path, worker_root)
     runworkers = "run_workers:%s,%s,%s,%s,%s" \
         % (worker_root, masterip, planid, cases_path, other_variables)
@@ -40,8 +45,12 @@ def distribute_tasks(tags, port):
         ])
 
 
-def collect_results(tags, port, worker_root, slavesip, is_tcms):
+def collect_results(tags, plan_id, run_id, worker_root, slavesip,
+                    is_tcms, output_dir):
     """for collecting tcms xmlrpc signal and dealing with them"""
+    port = plan_id
+    tcms = TCMS()
+    tcms.update_run_status(run_id, 0)
     context = zmq.Context()
     # socket for results_receive
     results_receiver = context.socket(zmq.PULL)
@@ -56,16 +65,15 @@ def collect_results(tags, port, worker_root, slavesip, is_tcms):
     while True:
         result = results_receiver.recv_pyobj()
         receive_count += 1
-        print '######################the content is: ', result
-        print '######################receive_count is: ', receive_count
         if is_tcms:
             #***************** Update TCMS caserun status **************
-            print 'emulate tcms doing'.center(80, '*')
-            print 'the content is: ', result
-            time.sleep(5)
-            #receive_count += 1
-            print 'tcms well done'.center(80, '*')
-            #*********************** Finally ***************************
+            caserun_id = tcms.get_caserun_id(run_id, result['caseid'])
+            tcms.update_caserun_status(caserun_id, result['status'])
+            if result['status'] != 'PASSED':
+                tcms.update_caserun_log(caserun_id, result['log'])
+            print 'Case-run %s is updated in TCMS' % result['caseid']
+            #***********************************************************
+        #*********************** Finally *******************************
         if receive_count == task_num:
             #sending kill signal to workers
             controller.send_pyobj("KILL")
@@ -75,12 +83,13 @@ def collect_results(tags, port, worker_root, slavesip, is_tcms):
             collectresults = "collect_reports:%s" % worker_root
             os.system("fab -f %s -H %s %s"
                       % (fab_file, slavesip, collectresults))
-            os.system("rebot --name 'Demo Report' --output alloutput \
-                      --log alllog --report allreport \
-                      --processemptysuite --tagstatexclude 'ID_*' ./*.xml")
+            os.system("rebot --name 'RobotX Report' --outputdir %s \
+                      --output output --processemptysuite --tagstatexclude \
+                      'ID_*' ./*.xml" % output_dir)
             # kill all!!!
             time.sleep(5)
             break
+    tcms.update_run_status(run_id, 1)
     print '\n', 'GAME OVER'.center(80, '=')
 
 
