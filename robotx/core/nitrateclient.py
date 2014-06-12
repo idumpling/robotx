@@ -224,8 +224,7 @@ class TCMS(object):
                 the_cases = self.server.TestCase.filter({
                     'plan__plan_id': plan_id,
                     'is_automated': 1,
-                    'case_status__name': 'CONFIRMED'
-                    })
+                    'case_status__name': 'CONFIRMED'})
             except:
                 raise TCMSException("ERROR[TCMS]': \
                         Failed to filter case")
@@ -238,8 +237,7 @@ class TCMS(object):
                         'plan__plan_id': plan_id,
                         'is_automated': 1,
                         'case_status__name': 'CONFIRMED',
-                        'tag__name': tag
-                        })
+                        'tag__name': tag})
                 except:
                     raise TCMSException("ERROR[TCMS]': \
                             Failed to filter case")
@@ -257,8 +255,7 @@ class TCMS(object):
                 the_cases = self.server.TestCase.filter({
                     'plan__plan_id': plan_id,
                     'is_automated': 1,
-                    'case_status__name': 'CONFIRMED'
-                    })
+                    'case_status__name': 'CONFIRMED'})
             except:
                 raise TCMSException("ERROR[TCMS]': \
                         Failed to filter case")
@@ -271,8 +268,7 @@ class TCMS(object):
                         'plan__plan_id': plan_id,
                         'is_automated': 1,
                         'case_status__name': 'CONFIRMED',
-                        'priority__value': priority.upper()
-                        })
+                        'priority__value': priority.upper()})
                 except:
                     raise TCMSException("ERROR[TCMS]': \
                             Failed to filter case")
@@ -286,6 +282,16 @@ class TCMS(object):
         """
         case_ids = []
         cases = self.server.TestPlan.get_test_cases(plan_id)
+        case_ids = [case['case_id'] for case in cases]
+        return case_ids
+
+    def filter_case_via_status(self, run_id, status):
+        """filter cases via case-run status from run
+        """
+        case_ids = []
+        cases = self.server.TestCaseRun.filter({'run__run_id': run_id,
+                                                'case_run_status__name':
+                                                status})
         case_ids = [case['case_id'] for case in cases]
         return case_ids
 
@@ -310,6 +316,9 @@ class TCMS(object):
                                                       priorities)
                 case_ids = [id for id in case_ids_in_run
                             if id in valid_case_ids]
+                # only collect idel case
+                idel_case_ids = self.filter_case_via_status(run_id, 'IDLE')
+                case_ids = list(set(case_ids) & set(idel_case_ids))
                 print '\n', 'Existing Run ID: %s'.center(70, '*') % run_id
                 print '\n'
         elif plan_id == '':
