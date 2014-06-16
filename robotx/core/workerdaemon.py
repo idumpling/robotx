@@ -1,6 +1,7 @@
 """Distributed Testing System - Worker"""
 
 
+import os
 import sys
 from random import randint
 
@@ -8,9 +9,11 @@ import zmq
 from robot import run
 
 
-def worker_shop(context=None, masterip='localhost', port='', tests='',
+def worker_shop(context=None, masterip='localhost', port='', project_name='',
                 other_variables=''):
     """worker will say hi with task controller"""
+    tests = os.path.join(project_name, 'cases')
+    results_path = os.path.join(project_name, 'results')
     #worker_ip = get_ip()
     listener='robotx.core.distlistener.MultiListener:%s:%s' % (masterip, port)
     #identity = unicode(worker_ip)
@@ -45,6 +48,7 @@ def worker_shop(context=None, masterip='localhost', port='', tests='',
                     include=tag,
                     #exclude=['notready'],
                     noncritical=['noncritical'],
+                    outputdir=results_path,
                     output=tag,
                     variable=other_variables,
                     tagstatexclude='ID_*',
@@ -62,5 +66,5 @@ if __name__ == '__main__':
     PLANID = THEARGS[2]
     TESTS = THEARGS[3]
     OVARIABLES = THEARGS[4]
-    worker_shop(masterip=MASTERIP, port=PLANID, tests=TESTS,
+    worker_shop(masterip=MASTERIP, port=PLANID, project_name=TESTS,
                 other_variables=OVARIABLES)

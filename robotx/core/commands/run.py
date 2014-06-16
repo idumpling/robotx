@@ -8,7 +8,6 @@ import os
 import sys
 from datetime import datetime
 from multiprocessing import Pool
-from os import path
 
 from robot import run
 
@@ -86,6 +85,8 @@ class Command(BaseCommand):
         if opts.is_jenkins:
             # run with Jenkins
             params = ParamsHandler()
+            project_name = params.project_name
+            os.environ['project_name'] = project_name
             cases_path = params.cases_path
             plan_id = params.tcms_plan_id
             run_id = params.tcms_run_id
@@ -137,7 +138,7 @@ class Command(BaseCommand):
                 slavesip = reduce(lambda x, y: x+','+y, slavesip_list)
                 masterip = params.master_ip
                 worker_root = '/home/automation'
-                project_path = os.path.join(cases_path, os.pardir)
+                project_path = params.project_path
                 robotpool = Pool()
                 print 'Start to launch workers ...'.center(50, '*')
                 robotpool.apply_async(launch_workers,
@@ -160,6 +161,11 @@ class Command(BaseCommand):
             plan_id = opts.plan_id
             run_id = opts.run_id
             project_path = opts.cases
+            if project_path[-1] == '/':
+                project_path = project_path[:-1]
+            project_name = project_path.split('/')[-1]
+            os.environ['project_name'] = project_name
+            pass
             cases_path = os.path.join(project_path, 'cases')
             tags = opts.case_tags
             priorities = opts.case_priorities
@@ -222,10 +228,8 @@ class Command(BaseCommand):
                 robotpool.apply_async(collect_results, args=(tag_case_id, \
                                       plan_id, run_id, worker_root, \
                                       slavesip, opts.is_tcms, output_dir,))
-                print 'Start to launch workers ...'.center(50, '*')
                 robotpool.close()
                 robotpool.join()
-
         etime = datetime.now()
         elapsed_time = etime - stime
         print 'Elapsed Time: %s' % elapsed_time

@@ -49,6 +49,18 @@ class ParamsHandler(object):
             setattr(self.config, param.lower(), os.environ.get(param))
 
     @property
+    def project_name(self):
+        """return project name
+        """
+        return self.config.project_name
+
+    @property
+    def project_path(self):
+        """return project path
+        """
+        return os.path.join(CUR_DIR, 'tests', self.config.project_name)
+
+    @property
     def cases_path(self):
         """return case path
         """

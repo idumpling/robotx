@@ -31,19 +31,21 @@ def copy_files(project_path, worker_root):
     put(worker_file, worker_root, use_sudo=True)
 
 
-def run_workers(worker_root, masterip, planid, cases_path, other_variables):
+def run_workers(worker_root, masterip, planid, project_name, other_variables):
     """run all workers on given hosts"""
     worker_file = 'workerdaemon.py'
     worker_cmd = 'python %s %s %s %s %s' \
-                 % (worker_file, masterip, planid, cases_path, other_variables)
+        % (worker_file, masterip, planid, project_name, other_variables)
     with shell_env(DISPLAY=':0'):
         with cd(worker_root):
             run(worker_cmd)
 
 
-def collect_reports(worker_root):
+def collect_reports(worker_root, project_name):
     """docstring for collect_reports"""
-    with cd(worker_root):
+    results_path = os.path.join(worker_root, project_name, 'results')
+    with cd(results_path):
         print "\nStart to collect result files"
         get('*.xml', './')
+        run('rm -rf *.xml')
 

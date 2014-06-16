@@ -13,18 +13,22 @@ from robotx.core.nitrateclient import TCMS
 def launch_workers(project_path, worker_root, masterip,
                    slavesip, planid, other_variables):
     """docstring for launch_worker"""
+    print 'Start to launch workers ...'.center(50, '*')
     if project_path[-1] == '/':
         project_path = project_path[:-1]
     project_name = project_path.split('/')[-1]
     robotx_path = robotx.__path__[0]
     fab_file = os.path.join(robotx_path, 'core', 'fabworker.py')
     #cases_path = os.path.join(project_path, 'cases')
-    cases_path = os.path.join(project_name, 'cases')
+    #cases_path = os.path.join(project_name, 'cases')
+    #results_path = os.path.join(project_name, 'results')
     copyfiles = "copy_files:%s,%s" % (project_path, worker_root)
     runworkers = "run_workers:%s,%s,%s,%s,%s" \
-        % (worker_root, masterip, planid, cases_path, other_variables)
-    os.system("fab -f %s -H %s %s %s"
-              % (fab_file, slavesip, copyfiles, runworkers))
+        % (worker_root, masterip, planid, project_name, other_variables)
+    os.system('fab --hide=running -f %s -H %s %s'
+              % (fab_file, slavesip, copyfiles))
+    os.system('fab -f %s -H %s %s'
+              % (fab_file, slavesip, runworkers))
 
 
 def distribute_tasks(tags, port):
@@ -48,6 +52,7 @@ def distribute_tasks(tags, port):
 def collect_results(tags, plan_id, run_id, worker_root, slavesip,
                     is_tcms, output_dir):
     """for collecting tcms xmlrpc signal and dealing with them"""
+    project_name = os.environ['project_name']
     port = plan_id
     tcms = TCMS()
     tcms.update_run_status(run_id, 0)
@@ -80,13 +85,17 @@ def collect_results(tags, plan_id, run_id, worker_root, slavesip,
             # collect reports and produce final report
             robotx_path = robotx.__path__[0]
             fab_file = os.path.join(robotx_path, 'core', 'fabworker.py')
-            collectresults = "collect_reports:%s" % worker_root
-            os.system("fab -f %s -H %s %s"
+            collectresults = "collect_reports:%s,%s" \
+                % (worker_root, project_name)
+            os.system('fab --hide=running -f %s -H %s %s'
                       % (fab_file, slavesip, collectresults))
             os.system("rebot --name 'RobotX Report' --outputdir %s \
                       --output output --processemptysuite --tagstatexclude \
                       'ID_*' ./*.xml" % output_dir)
-            # kill all!!!
+            time.sleep(3)
+            os.system('rm -rf ID_*.xml')
+            # kill all workers!!!
+            # coon die henchman boil:-)
             time.sleep(5)
             break
     tcms.update_run_status(run_id, 1)
