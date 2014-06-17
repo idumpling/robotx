@@ -17,9 +17,9 @@ import robotx
 env.password = os.environ['all_slave_password']
 # env.hosts = ['192.168.122.56', '192.168.122.153', '192.168.122.254']
 
-env.skip_bad_hosts=True
+env.skip_bad_hosts = True
 #env.timeout=120
-env.parallel=True
+env.parallel = True
 
 
 def copy_files(project_path, worker_root):
@@ -48,4 +48,3 @@ def collect_reports(worker_root, project_name):
         print "\nStart to collect result files"
         get('*.xml', './')
         run('rm -rf *.xml')
-

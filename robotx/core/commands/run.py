@@ -135,21 +135,22 @@ class Command(BaseCommand):
                 slave_password = params.slave_pwd
                 os.environ['all_slave_password'] = slave_password
                 slavesip_list = params.slave_ips
-                slavesip = reduce(lambda x, y: x+','+y, slavesip_list)
+                slavesip = reduce(lambda x, y: x + ',' + y, slavesip_list)
                 masterip = params.master_ip
                 worker_root = '/home/automation'
                 project_path = params.project_path
                 robotpool = Pool()
                 print 'Start to launch workers ...'.center(50, '*')
                 robotpool.apply_async(launch_workers,
-                                      args=(project_path, worker_root, \
-                                      masterip, slavesip, \
-                                      plan_id, other_variables,))
+                                      args=(project_path, worker_root,
+                                            masterip, slavesip,
+                                            plan_id, other_variables,))
                 robotpool.apply_async(distribute_tasks,
                                       args=(tag_case_id, plan_id,))
-                robotpool.apply_async(collect_results, args=(tag_case_id, \
-                                      plan_id, run_id, worker_root, \
-                                      slavesip, opts.is_tcms, output_dir))
+                robotpool.apply_async(collect_results,
+                                      args=(tag_case_id, plan_id, run_id,
+                                            worker_root, slavesip,
+                                            opts.is_tcms, output_dir))
                 robotpool.close()
                 robotpool.join()
         else:
@@ -215,19 +216,20 @@ class Command(BaseCommand):
                 slave_password = opts.password
                 os.environ['all_slave_password'] = slave_password
                 slavesip_list = opts.slave_ips
-                slavesip = reduce(lambda x, y: x+','+y, slavesip_list)
+                slavesip = reduce(lambda x, y: x + ',' + y, slavesip_list)
                 masterip = opts.masterip
                 worker_root = '/home/automation'
                 robotpool = Pool()
                 robotpool.apply_async(launch_workers,
-                                      args=(project_path, worker_root, \
-                                      masterip, slavesip, \
-                                      plan_id, other_variables,))
+                                      args=(project_path, worker_root,
+                                            masterip, slavesip,
+                                            plan_id, other_variables,))
                 robotpool.apply_async(distribute_tasks,
                                       args=(tag_case_id, plan_id,))
-                robotpool.apply_async(collect_results, args=(tag_case_id, \
-                                      plan_id, run_id, worker_root, \
-                                      slavesip, opts.is_tcms, output_dir,))
+                robotpool.apply_async(collect_results,
+                                      args=(tag_case_id, plan_id, run_id,
+                                            worker_root, slavesip,
+                                            opts.is_tcms, output_dir,))
                 robotpool.close()
                 robotpool.join()
         etime = datetime.now()

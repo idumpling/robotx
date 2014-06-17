@@ -15,7 +15,8 @@ def worker_shop(context=None, masterip='localhost', port='', project_name='',
     tests = os.path.join(project_name, 'cases')
     results_path = os.path.join(project_name, 'results')
     #worker_ip = get_ip()
-    listener='robotx.core.distlistener.MultiListener:%s:%s' % (masterip, port)
+    listener = 'robotx.core.distlistener.MultiListener:%s:%s' \
+               % (masterip, port)
     #identity = unicode(worker_ip)
     identity = u"%04x-%04x" % (randint(0, 0x10000), randint(0, 0x10000))
     context = context or zmq.Context.instance()
