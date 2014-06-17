@@ -2,3 +2,6 @@ robotframework>=2.8.1
 selenium>=2.35.0
 robotframework-selenium2library>=1.4.0
 pexpect>=2.4
+fabric>=1.8.3
+netifaces>=0.10.4
+pyzmq>=13.0.2
