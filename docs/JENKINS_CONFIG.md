@@ -50,6 +50,21 @@ The value is the plan id of your project
 * The format of the value: UsualAccount:xgao.  
   Then RobotX will change the tests variable ${UsualAccount} to "xgao"  
 
+### String Parameter: MASTER_IP  
+**Required when run as distributted module**   
+* If "--distributed" is given, the opts is required. i.e, 192.168.122.1
+
+#### Text Parameter: SLAVE_IPS  
+**Required when run as distributted module**   
+* If "--distributed" is given, the opts is required. i.e, 192.168.122.1
+* If giving more than one IP, pls type one priority per line.  
+      for example:   
+      root@192.168.122.56   
+      root@192.168.122.153   
+
+### String Parameter: SLAVE_PWD   
+**Required when run as distributted module**   
+**NOTE: all slaves can only have the same password(this's caused by one fabric bug.)**
 
 ### Restrict where this project can be run  
 Type the label expression for selecting machine node.
@@ -72,6 +87,12 @@ Type cmd to Jenkins "Execute Shell" below
 
     $ robotx run --jenkins
 
+### Parallel run tests on more than one PC   
+
+    $ robotx run --jenkins --tcms --distributed
+    or   
+    $ robotx run --jenkins --distributed
+   
 
 ### Post-build Actions  
 * Directory of Robot output: $WORKSPACE/tests/$PROJECT_NAME/results
@@ -81,5 +102,3 @@ Type cmd to Jenkins "Execute Shell" below
 * Log html name: log.html
 
 
-
-[Robot Framework]: http://robotframework.org/

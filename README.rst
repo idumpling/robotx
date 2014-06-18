@@ -4,15 +4,36 @@ RobotX
 Instructions
 ------------
 
+**Let all your robot Framework test cases fly!**
+
 The RobotX is a tool set for automation development with `Robot Framework`_.
 
-It includes the following tools:
+The Newest version (since version 0.2.1) can automatically intelligently and dynamically  
+partition all automated tests into multiple pcs, and each one of which can be  
+executed in parallel.
+The execution can happen on different physical/virtual machines.
+More the partitions, less tests executed on each one.
+That means that if you have multiple pcs you can use them for a combined test run.
 
+And since all of the partitions start almost at the same time overall test-execution time 
+gets divided by the number of partitions you make.
+for the usage examples of distributed execution, refer to here.
+
+It includes the following tools:
 - Runner
 - Generator
 - Debugger
 - Checker
 - Expander
+
+RobtX Runner is pretty powerful
+- It can be integrated into Jenkins.  
+- It can be used in command line.   
+- It can be used to run tests in parallel (since version 0.2.1).  
+- Get and filter tests from Test Case Management System.
+- Executed tests can be filtered and collected from Test Case Management System.  
+- The tests result can be updated to Test Case Management System in real-time.
+
 
 Installation
 ------------
@@ -55,13 +76,6 @@ Configure TCMS Client
 - Copy `tcms config`_ to /etc/, and name it as tcms.conf.
 
 - Open tcms.conf, and change all values to yours.
-
-Coming Soon
------------
-
-- Create Message Queue for improving the efficiency of RobotX communicate with TCMS.
-
-- Add the mechanism of parallel execution automated cases on multiple machine nodes at one time.
 
 
 

@@ -3,6 +3,18 @@ RobotX Usage
 
 The RobotX is a tool set for automation development with [Robot Framework][Robot Framework].
 
+The Newest version (since version 0.2.1) can automatically intelligently and dynamically  
+partition all automated tests into multiple pcs, and each one of which can be  
+executed in parallel.
+The execution can happen on different physical/virtual machines.
+More the partitions, less tests executed on each one.
+That means that if you have multiple pcs you can use them for a combined test run.
+
+And since all of the partitions start almost at the same time overall test-execution time 
+gets divided by the number of partitions you make.
+for the usage examples of distributed execution, refer to here.
+
+
 Helper
 ------
 #### Get all tools usage info  
@@ -45,6 +57,64 @@ Type cmd to shell below
 
     $ robotx run --cases=CASES_PATH --planid=PLAN_ID   
 
+### Parallel run tests on more than one PC   
+If you want to run all automated tests in parallel, you only need to add one addition 
+argument "--distributed" on the nun-parallel basis.
+
+### Parallel run with jenkins  
+For the parallel running way in Jenkins, you need to make sure that following  three special 
+
+parameters have been created and configured.   
+* MASTER_IP   
+* SLAVE_IPS   
+* SLAVE_PWD   
+for the detail steps, you can refer to this doc.    
+
+for example,   
+
+    $ robotx run --jenkins --tcms --distributed
+    or   
+    $ robotx run --jenkins --distributed
+
+### Parallel run without jenkins   
+Run tests from the command line.   
+Besides the addition argument "--distributed" that you need to set up with, 
+you need to set up following three arguments.   
+* MASTER_IP   
+* SLAVE_IPS   
+* SLAVE_PWD   
+
+for example,   
+
+    $ robotx run --tcms --distributed --masterip='10.66.136.111' \    
+      --planid='11340' --runid='149111' --cases='./Demo' \   
+      --hosts='root@10.66.136.112' --hosts='root@10.66.136.113' \   
+      --password='123456'   
+
+**NOTE:**  
+For the parallel running way, you need to make sure that following three addition 
+python packages have been installed successfully in your master machine and all slaves machine. 
+* pyzmq
+* fabric
+* netifaces
+
+Previous experience suggested this route could be tricky to install the python package "pyzmq".  
+If the process is failed via easy_install or python pip, you can try following steps,   
+In Red Hat Enterprise Linux, CentOS, Fedora cases,
+
+    $ yum groupinstall 'Development Tools'
+    $ yum install python-devel
+    $ yum install -y uuid-devel
+    $ yum install -y pkgconfig
+    $ yum install -y libtool
+    $ yum install -y gcc-c++ 
+    $ easy_install pip
+    $ pip install pyzmq
+
+Additionally, you'd better delete iptables rules on master machine.  
+
+    $ iptables -F 
+
 
 Generator
 ---------
@@ -64,7 +134,8 @@ Generator
 Debugger
 --------
 ### Insert breakpoint to test case  
-Insert keyword "debug" to test, then run test using pybot, and then test will be stoped at debug, and enter into shell debug mode.  
+Insert keyword "debug" to test, then run test using pybot, 
+and then test will be stoped at debug, and enter into shell debug mode.  
 Example  
 
       *** Settings ***
