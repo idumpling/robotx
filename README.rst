@@ -103,8 +103,8 @@ Configure TCMS Client
 .. _Nitrate: https://fedorahosted.org/nitrate/
 .. _default TCMS client of RobotX: https://github.com/idumpling/robotx/blob/master/robotx/core/nitrateclient.py
 .. _tcms config: https://github.com/idumpling/robotx/blob/master/robotx/conf/tcms.conf
-.. _Jenkins configure about distributed run: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parameters-for-running-as-distributed  
-.. _Parallel run in jenkins: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parallel-run-tests-on-more-than-one-PC
-.. _Parallel run in cmd: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#Parallel-run-tests-on-more-than-one-PC
+.. _Jenkins configure about distributed run: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#parameters-for-running-as-distributed  
+.. _Parallel run in jenkins: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#parallel-run-tests-on-more-than-one-pc  
+.. _Parallel run in cmd: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#parallel-run-tests-on-more-than-one-pc  
 
 

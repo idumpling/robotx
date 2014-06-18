@@ -75,7 +75,9 @@ If your TCMS is not Nitrate(such as TestLink), you need write a new client and r
 [Nitrate]: https://fedorahosted.org/nitrate/
 [nitrate client]: https://github.com/idumpling/robotx/blob/master/robotx/core/nitrateclient.py
 [tcms config]: https://github.com/idumpling/robotx/blob/master/robotx/conf/tcms.conf
-[jenkins dist run]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parameters-for-running-as-distributed  
-[parallel run in jenkins]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parallel-run-tests-on-more-than-one-PC
-[parallel run in cmd]: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#Parallel-run-tests-on-more-than-one-PC
+[jenkins dist run]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#parameters-for-running-as-distributed   
+[parallel run in jenkins]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#parallel-run-tests-on-more-than-one-pc  
+[parallel run in cmd]: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#parallel-run-tests-on-more-than-one-pc  
+
+
 
