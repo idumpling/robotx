@@ -3,20 +3,23 @@ RobotX
 
 Instructions
 ------------
+
 **Let all your robot Framework test cases fly!**
 
-The RobotX is a tool set for automation development with `Robot Framework`_.
+The RobotX is a tool set for automation development with [Robot Framework][Robot Framework].  
 
-The Newest version (since version 0.2.1) can automatically intelligently and dynamically  
-partition all automated tests into multiple pcs, and each one of which can be  
-executed in parallel.
+The Newest version (since version 0.2.1) can automatically, intelligently and dynamically partition all automated tests into multiple pcs, and each one of which can be executed in parallel.
 The execution can happen on different physical/virtual machines.
 More the partitions, less tests executed on each one.
 That means that if you have multiple pcs you can use them for a combined test run.
 
 And since all of the partitions start almost at the same time overall test-execution time 
 gets divided by the number of partitions you make.
-for the usage examples of distributed execution, refer to here.
+for the usage examples of distributed execution, refer to following docs.
+
+* [Jenkins configure about distributed run][jenkins dist run]   
+* [Usage of parallel run tests in Jenkins][parallel run in jenkins]  
+* [Usage of parallel run tests in cmd][parallel run in cmd]   
 
 It includes the following tools:
 * Runner
@@ -72,3 +75,7 @@ If your TCMS is not Nitrate(such as TestLink), you need write a new client and r
 [Nitrate]: https://fedorahosted.org/nitrate/
 [nitrate client]: https://github.com/idumpling/robotx/blob/master/robotx/core/nitrateclient.py
 [tcms config]: https://github.com/idumpling/robotx/blob/master/robotx/conf/tcms.conf
+[jenkins dist run]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parameters-for-running-as-distributed  
+[parallel run in jenkins]: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parallel-run-tests-on-more-than-one-PC
+[parallel run in cmd]: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#Parallel-run-tests-on-more-than-one-PC
+

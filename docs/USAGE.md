@@ -61,7 +61,7 @@ Type cmd to shell below
 If you want to run all automated tests in parallel, you only need to add one addition 
 argument "--distributed" on the nun-parallel basis.
 
-### Parallel run with jenkins  
+#### Parallel run with jenkins  
 For the parallel running way in Jenkins, you need to make sure that following  three special 
 
 parameters have been created and configured.   
@@ -72,11 +72,11 @@ for the detail steps, you can refer to this doc.
 
 for example,   
 
-    $ robotx run --jenkins --tcms --distributed
+    $ robotx run --tcms --distributed
     or   
-    $ robotx run --jenkins --distributed
+    $ robotx run --distributed
 
-### Parallel run without jenkins   
+#### Parallel run without jenkins   
 Run tests from the command line.   
 Besides the addition argument "--distributed" that you need to set up with, 
 you need to set up following three arguments.   

@@ -19,19 +19,36 @@ And since all of the partitions start almost at the same time overall test-execu
 gets divided by the number of partitions you make.
 for the usage examples of distributed execution, refer to here.
 
+- `Jenkins configure about distributed run`_
+
+- `Parallel run in jenkins`_
+
+- `Parallel run in cmd`_
+
 It includes the following tools:
+
 - Runner
+
 - Generator
+
 - Debugger
+
 - Checker
+
 - Expander
 
 RobtX Runner is pretty powerful
+
 - It can be integrated into Jenkins.  
+
 - It can be used in command line.   
+
 - It can be used to run tests in parallel (since version 0.2.1).  
+
 - Get and filter tests from Test Case Management System.
+
 - Executed tests can be filtered and collected from Test Case Management System.  
+
 - The tests result can be updated to Test Case Management System in real-time.
 
 
@@ -86,3 +103,8 @@ Configure TCMS Client
 .. _Nitrate: https://fedorahosted.org/nitrate/
 .. _default TCMS client of RobotX: https://github.com/idumpling/robotx/blob/master/robotx/core/nitrateclient.py
 .. _tcms config: https://github.com/idumpling/robotx/blob/master/robotx/conf/tcms.conf
+.. _Jenkins configure about distributed run: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parameters-for-running-as-distributed  
+.. _Parallel run in jenkins: https://github.com/idumpling/robotx/blob/master/docs/JENKINS_CONFIG.md#Parallel-run-tests-on-more-than-one-PC
+.. _Parallel run in cmd: https://github.com/idumpling/robotx/blob/master/docs/USAGE.md#Parallel-run-tests-on-more-than-one-PC
+
+

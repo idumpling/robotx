@@ -50,7 +50,9 @@ The value is the plan id of your project
 * The format of the value: UsualAccount:xgao.  
   Then RobotX will change the tests variable ${UsualAccount} to "xgao"  
 
-### String Parameter: MASTER_IP  
+
+### Parameters for running as distributed 
+#### String Parameter: MASTER_IP  
 **Required when run as distributted module**   
 * If "--distributed" is given, the opts is required. i.e, 192.168.122.1
 
@@ -62,9 +64,10 @@ The value is the plan id of your project
       root@192.168.122.56   
       root@192.168.122.153   
 
-### String Parameter: SLAVE_PWD   
+#### String Parameter: SLAVE_PWD   
 **Required when run as distributted module**   
 **NOTE: all slaves can only have the same password(this's caused by one fabric bug.)**
+
 
 ### Restrict where this project can be run  
 Type the label expression for selecting machine node.
