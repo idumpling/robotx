@@ -4,7 +4,7 @@ and Selenium origin webdriver extention
 
 example,
 
-from SeleniumExt import SeleniumExt
+from robotx.lib.SeleniumExt import SeleniumExt
 
 
 class MyExt(SeleniumExt):
